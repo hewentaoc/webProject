@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+        .fl::after {
+            content: "";
+            display: block;
+            clear: both;
+            overflow: hidden;
+        }
+
+        .wrapper {
+            padding: 10px 5px;
+            width: 300px;
+            margin: 100px auto 0;
+            border: 1px solid #ccc;
+        }
+
+        .wrapper-top {
+            margin-bottom: 12px;
+        }
+
+        .wrapper-top .hot {
+            font-size: 20px;
+            font-weight: bold;
+            float: left;
+        }
+
+        .wrapper-top .change {
+            float: right;
+            font-size: 16px;
+            color: rgb(50, 14, 180);
+            display: inline-block;
+            padding-top: 5px;
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .tbl {
+            display: none;
+            
+        }
+        .prev{
+            border-bottom: 1px solid #ccc;
+            padding:8px 0;
+        }
+
+        .wrapper .number {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            background-color: rgb(11, 124, 177);
+            color: white;
+            float: left;
+            text-align: center;
+        }
+
+        .wrapper .hot-point {
+            float: right;
+        }
+
+        .wrapper .title {
+            cursor: pointer;
+            padding-left: 8px;
+        }
+
+        .wrapper .hot-point::after {
+            content: '';
+            display: inline-block;
+            background-size: 100% 100%;
+            width: 15px;
+            height: 15px;
+        }
+
+        .wrapper .hot-point.up::after {
+            background-image: url('./bg/up.png');
+        }
+
+        .wrapper .hot-point.down::after {
+            background-image: url('./bg/down.png');
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="wrapper-top fl">
+            <span class="hot">搜素热点</span>
+            <button class="change">换一换</button>
+        </div>
+        <ul class="show">
+            <li class="tbl fl">
+                <span class="number">1</span>
+                <span class="title">迪士尼</span>
+                <span class="hot-point ">1234</span>
+            </li>
+        </ul>
+    </div>
+    <script src="data.js"></script>
+    <script src='jquery.js'></script>
+    <script>
+        (function(data){
+           var $wrapper = $('.wrapper')
+           var $show = $wrapper.find('.show');
+           var $change = $('.change');
+           var colorArray=['#f54545','#ff8547','#ffac38'];
+           var cur = 0;
+           var index = Math.ceil(data.length /10);//代表一共多少条数据
+           $show.hide();
+
+           //点击事件
+           $change.on('click',function(){
+               cur = ++cur % index ; //控制页数
+               renderPage(data);
+
+           })
+
+           function renderPage(data){
+               //点击清空之前的一组数据
+               $('.prev').remove();
+               $show.hide();
+               
+
+               //控制每页的数量为10    
+               var len = data.length - cur*10 >=10 ? 10 :data.length - cur*10 ;
+               for(var i=0 ;i<len ;i++){
+                   var $clone = $show.find('.tbl').clone().removeClass('tbl').addClass('prev');
+                   var ele = data[i+cur*10];
+
+                   $clone.children('span').eq(0)
+                     .text(i+cur*10+1).css('backgroundColor',cur==0&&colorArray[i+cur*10])
+                       .next()
+                        .text(ele.title)
+                         .next()
+                           .text(ele.search)
+                              .addClass(ele.search>ele.lastSearch ? 'up' : 'down');
+                    $show.append($clone); 
+               }
+               $show.fadeIn();//渐出
+           }
+           renderPage(data);
+        }(data))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // (function (data) {
+        //     var $wrapper = $('.wrapper');
+        //     var $show = $('.show');//ul长度
+        //     var cur = 0;
+        //     var colorArray=['#f54545','#ff8547','#ffac38'];
+        //     $show.hide();
+        //     console.log($show);
+
+        //     function renderPage(data) {
+
+        //         var len = (data.length - cur * 10 >= 10) ? 10 : data.length - cur * 10;
+        //         for (var i = 0; i < len; i++) {
+        //           var $clone =$wrapper.find('.tbl').clone().removeClass('tbl').addClass('pre');
+        //             var ele = data[i + cur * 10];
+        //             $clone.children('span').eq(0).text(i +cur*10 + 1)
+        //                 .css('backgroundColor',cur==0&&colorArray[i+cur])
+        //                  .next().text(ele.title)
+        //                   .next().text(ele.search)
+        //                     .addClass(ele.search > ele.lastSearch ? 'up' : 'down');
+        //             $show.append($clone);
+        //             // console.log($clone);
+        //         }
+        //         $show.fadeIn();
+               
+        //     }
+        //     renderPage(data);
+          
+
+        // }(data))
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
